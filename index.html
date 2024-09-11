@@ -219,9 +219,12 @@
     </div>
 
     <script>
-        // Retrieve saved data from localStorage or initialize to default
-        const savedDrinks = JSON.parse(localStorage.getItem('drinks')) || ["Vodka", "Tequila", "Beer", "Whiskey", "Rum"];
-        const savedCounts = JSON.parse(localStorage.getItem('counts')) || Array(savedDrinks.length).fill(0);
+        // List of drinks
+        const initialDrinks = ["Vodka", "Tequila", "Beer", "Whiskey", "Rum"];
+        let drinks = [...initialDrinks];
+
+        // Retrieve saved counts from localStorage or initialize to zero
+        const savedCounts = JSON.parse(localStorage.getItem('counts')) || Array(drinks.length).fill(0);
         let totalDrinks = parseInt(localStorage.getItem('total')) || 0;
 
         // Function to create a drink item
@@ -281,8 +284,7 @@
             savedCounts.forEach((count, index) => {
                 if (count > 0) {
                     const breakdownLine = document.createElement("div");
-                    breakdownLine.innerText = savedDrinks[index] + "
-                    breakdownLine.innerText = savedDrinks[index] + " - " + count;
+                    breakdownLine.innerText = drinks[index] + " - " + count;
                     totalContent.appendChild(breakdownLine);
                 }
             });
@@ -290,9 +292,9 @@
 
         // Save data to localStorage
         function saveData() {
-            localStorage.setItem('drinks', JSON.stringify(savedDrinks));
+            localStorage
+                        localStorage.setItem('total', totalDrinks);
             localStorage.setItem('counts', JSON.stringify(savedCounts));
-            localStorage.setItem('total', totalDrinks);
         }
 
         // Reset all drink counts
@@ -316,20 +318,20 @@
 
         // Add new drink
         function addNewDrink(drinkName) {
-            if (drinkName && !savedDrinks.includes(drinkName)) {
-                savedDrinks.push(drinkName);
+            if (drinkName && !drinks.includes(drinkName)) {
+                drinks.push(drinkName);
                 savedCounts.push(0); // Add initial count of 0 for new drink
-                const newDrinkItem = createDrinkItem(drinkName, savedDrinks.length - 1);
+                const newDrinkItem = createDrinkItem(drinkName, drinks.length - 1);
                 document.getElementById("drinks-list").appendChild(newDrinkItem);
                 saveData();
                 updateTotal();
             }
         }
 
-        // Initialize the page with saved drinks
+        // Add initial drinks to the list
         function initializeDrinks() {
             const drinksList = document.getElementById("drinks-list");
-            savedDrinks.forEach((drink, index) => {
+            drinks.forEach((drink, index) => {
                 const drinkItem = createDrinkItem(drink, index);
                 drinksList.appendChild(drinkItem);
             });
@@ -353,3 +355,4 @@
     </script>
 </body>
 </html>
+
