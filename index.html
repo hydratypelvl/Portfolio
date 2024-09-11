@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drink Counter with Local Storage</title>
+    <title>Drink Counter with Local Storage and Modal</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,6 +56,50 @@
             border-radius: 10px;
             background-color: #f1f1f1;
         }
+
+        #buttons {
+            margin-top: 20px;
+        }
+
+        #reset, #submit {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        /* Modal styles */
+        #modal {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .checkmark {
+            font-size: 50px;
+            color: green;
+        }
+
+        #close-modal {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -68,28 +112,37 @@
 
     <div id="total">Total Drinks: 0</div> <!-- Total div -->
 
+    <div id="buttons">
+        <button id="reset">Reset</button>
+        <button id="submit">Submit</button>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal">
+        <div id="modal-content">
+            <div class="checkmark">&#10003;</div> <!-- Checkmark Icon -->
+            <p>Thanks for submitting!</p>
+            <button id="close-modal">Okay</button>
+        </div>
+    </div>
+
     <script>
         // List of drinks
         const drinks = ["Vodka", "Tequila", "Beer", "Whiskey", "Rum"];
 
-        // Function to retrieve saved counts from localStorage or set to initial state
+        // Retrieve saved counts from localStorage or initialize to zero
         const savedCounts = JSON.parse(localStorage.getItem('counts')) || Array(drinks.length).fill(0);
-
-        // Retrieve saved total from localStorage or set to 0
         let totalDrinks = parseInt(localStorage.getItem('total')) || 0;
 
         // Function to create a drink item
         function createDrinkItem(drinkName, index) {
-            // Create container for the drink item
             const drinkItem = document.createElement("div");
             drinkItem.className = "drink-item";
 
-            // Create the drink name element
             const drinkNameEl = document.createElement("span");
             drinkNameEl.className = "drink-name";
             drinkNameEl.innerText = drinkName;
 
-            // Create the minus button
             const minusButton = document.createElement("button");
             minusButton.innerText = "-";
             minusButton.onclick = function() {
@@ -97,32 +150,29 @@
                 let currentAmount = parseInt(amountEl.innerText);
                 if (currentAmount > 0) {
                     amountEl.innerText = currentAmount - 1;
-                    totalDrinks -= 1; // Decrease total drinks
-                    savedCounts[index] -= 1; // Update local saved count
+                    totalDrinks -= 1;
+                    savedCounts[index] -= 1;
                     updateTotal();
                     saveData();
                 }
             };
 
-            // Create the amount display element
             const amountEl = document.createElement("span");
             amountEl.className = "amount";
-            amountEl.innerText = savedCounts[index]; // Load the saved value or default to 0
+            amountEl.innerText = savedCounts[index];
 
-            // Create the plus button
             const plusButton = document.createElement("button");
             plusButton.innerText = "+";
             plusButton.onclick = function() {
                 const amountEl = drinkItem.querySelector(".amount");
                 let currentAmount = parseInt(amountEl.innerText);
                 amountEl.innerText = currentAmount + 1;
-                totalDrinks += 1; // Increase total drinks
-                savedCounts[index] += 1; // Update local saved count
+                totalDrinks += 1;
+                savedCounts[index] += 1;
                 updateTotal();
                 saveData();
             };
 
-            // Append elements to the drink item container
             drinkItem.appendChild(drinkNameEl);
             drinkItem.appendChild(minusButton);
             drinkItem.appendChild(amountEl);
@@ -138,8 +188,27 @@
 
         // Save data to localStorage
         function saveData() {
-            localStorage.setItem('total', totalDrinks); // Save total drinks
-            localStorage.setItem('counts', JSON.stringify(savedCounts)); // Save individual drink counts
+            localStorage.setItem('total', totalDrinks);
+            localStorage.setItem('counts', JSON.stringify(savedCounts));
+        }
+
+        // Reset all drink counts
+        function resetDrinks() {
+            savedCounts.fill(0);
+            totalDrinks = 0;
+            saveData();
+            updateTotal();
+            document.querySelectorAll('.amount').forEach(el => el.innerText = "0");
+        }
+
+        // Modal functionality
+        function showModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+            resetDrinks();
         }
 
         // Add drinks to the list
@@ -152,7 +221,16 @@
         // Update total on page load
         updateTotal();
 
+        // Reset button functionality
+        document.getElementById("reset").addEventListener("click", resetDrinks);
+
+        // Submit button functionality
+        document.getElementById("submit").addEventListener("click", showModal);
+
+        // Close modal functionality
+        document.getElementById("close-modal").addEventListener("click", closeModal);
     </script>
 
 </body>
 </html>
+
