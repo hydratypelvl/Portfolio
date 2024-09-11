@@ -57,6 +57,10 @@
             background-color: #f1f1f1;
         }
 
+        #total-content {
+            margin-top: 10px;
+        }
+
         #buttons {
             display: flex;
             gap: 10px; /* Add gap between buttons */
@@ -147,7 +151,10 @@
         <!-- Drinks will be added dynamically here -->
     </div>
 
-    <div id="total">Total Drinks: 0</div> <!-- Total div -->
+    <div id="total">
+        <span id="total-number">Total Drinks: 0</span>
+        <div id="total-content"></div> <!-- Breakdown will be injected here -->
+    </div>
 
     <div id="buttons">
         <button id="reset">Reset</button>
@@ -220,7 +227,18 @@
 
         // Update the total drinks count in the total div
         function updateTotal() {
-            document.getElementById("total").innerText = "Total Drinks: " + totalDrinks;
+            document.getElementById("total-number").innerText = "Total Drinks: " + totalDrinks;
+            const totalContent = document.getElementById("total-content");
+            totalContent.innerHTML = ""; // Clear previous breakdown
+
+            // Generate breakdown of drink counts
+            savedCounts.forEach((count, index) => {
+                if (count > 0) {
+                    const breakdownLine = document.createElement("div");
+                    breakdownLine.innerText = drinks[index] + " - " + count;
+                    totalContent.appendChild(breakdownLine);
+                }
+            });
         }
 
         // Save data to localStorage
