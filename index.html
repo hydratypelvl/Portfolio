@@ -3,356 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drink Counter with Local Storage and Modal</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        .container {
-            width: 320px; /* Set a fixed width for consistency */
-            margin: 0 auto; /* Center align the container */
-        }
-
-        #drinks-list, #total, #buttons {
-            width: 100%; /* Make sure each element takes full width of the container */
-            margin-bottom: 20px;
-        }
-
-        #drinks-list {
-            padding: 15px;
-            border: 2px solid #ccc;
-            border-radius: 15px; /* Rounded border for the whole list */
-            background-color: #f9f9f9;
-        }
-
-        .drink-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 10px; /* Rounded border for each list item */
-            background-color: #fff;
-        }
-
-        .drink-item button {
-            padding: 5px 10px;
-            font-size: 16px;
-        }
-
-        .drink-item .amount {
-            font-size: 18px;
-            width: 40px;
-            text-align: center;
-        }
-
-        .drink-name {
-            flex: 1;
-            text-align: left;
-            padding-right: 10px;
-        }
-
-        #total {
-            font-size: 20px;
-            font-weight: bold;
-            padding: 10px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            background-color: #f1f1f1;
-        }
-
-        #total-content {
-            margin-top: 10px;
-        }
-
-        #total-content div {
-            font-weight: normal; /* Set font weight to normal for breakdown lines */
-            font-size: 16px; /* Adjust font size if needed */
-        }
-
-        #buttons {
-            display: flex;
-            gap: 10px; /* Add gap between buttons */
-            margin-top: 20px;
-        }
-
-        #reset, #submit {
-            flex: 1;
-            padding: 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 10px; /* Square buttons with slightly rounded corners */
-            border: 2px solid #007bff; /* Border color same as submit button background */
-            text-align: center;
-            background-color: white; /* White background for reset button */
-        }
-
-        /* Submit Button (Primary) */
-        #submit {
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-            border: none; /* Remove border for submit button */
-        }
-
-        #submit:hover {
-            background-color: #0056b3;
-        }
-
-        /* Reset Button (Secondary) */
-        #reset {
-            color: #007bff; /* Text color same as submit button background */
-        }
-
-        #reset:hover {
-            background-color: #f1f1f1; /* Light gray background on hover */
-        }
-
-        /* Add Drink Section */
-        #add-drink {
-            display: flex;
-            gap: 10px; /* Add gap between input and button */
-            margin-bottom: 20px;
-        }
-
-        #add-drink input {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-        }
-
-        #add-drink button {
-            padding: 10px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            border: 2px solid #007bff;
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-        }
-
-        #add-drink button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Modal styles */
-        #modal {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        #modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 300px;
-        }
-
-        .checkmark {
-            font-size: 50px;
-            color: green;
-        }
-
-        #close-modal {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-        }
-
-        #close-modal:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Rihards</title>
+    <!-- Hosted -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Local -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <h1 data-aos="zoom-in">Hello, i'm <span class="accent">Rihards Ādminis</span>.</h1>
+        <h2 data-aos="zoom-in">I'm a full-stack web developer</h2>
+        <a id="down" href="#about" data-aos="zoom-in"><span>View my work &#8595;</span></a>
+    </header>
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="about-title">ABOUT</div>
+        <div class="about-border"></div>
+        <div class="container">
 
-    <div class="container">
-        <h2>Drink Counter</h2>
-
-        <div id="drinks-list">
-            <!-- Drinks will be added dynamically here -->
-        </div>
-
-        <div id="add-drink">
-            <input type="text" id="new-drink" placeholder="Add a new drink" />
-            <button id="add-button">Add Drink</button>
-        </div>
-
-        <div id="total">
-            <span id="total-number">Total Drinks: 0</span>
-            <div id="total-content"></div> <!-- Breakdown will be injected here -->
-        </div>
-
-        <div id="buttons">
-            <button id="reset">Reset</button>
-            <button id="submit">Submit</button>
-        </div>
-
-        <!-- Modal -->
-        <div id="modal">
-            <div id="modal-content">
-                <div class="checkmark">&#10003;</div> <!-- Checkmark Icon -->
-                <p>Thanks for submitting!</p>
-                <button id="close-modal">Okay</button>
+            <div class="item" data-aos="fade-up" data-aos-duration="500"><i class="fa fa-rocket fa-5x accent" aria-hidden="true"></i>
+                <h1>Fast</h1>
+                <p>Fast load times and lag free interaction, my highest priority.</p>
+            </div>
+            <div class="item" data-aos="fade-up" data-aos-duration="1000"><i class="fa fa-window-restore fa-5x accent" aria-hidden="true"></i>
+                <h1>Responsive</h1>
+                <p>My layouts will work on any device, big or small.</p>
+            </div>
+            <div class="item" data-aos="fade-up" data-aos-duration="1500"><i class="fa fa-cogs fa-5x accent" aria-hidden="true"></i>
+                <h1>Dynamic</h1>
+                <p>Websites don't have to be static, I love making pages come to life.</p>
+            </div>
+            <div class="item" data-aos="fade-up" data-aos-duration="2000"><i class="fa fa-trash fa-5x accent" aria-hidden="true"></i>
+                <h1>Clean</h1>
+                <p>the website doesn't have to be populated with too many elements, I like clean and simple pages.</p>
             </div>
         </div>
-    </div>
+        <!-- IMAGE AND LANGUAGES -->
+        <div class="container-about">
+            <div class="item" data-aos="fade-right" data-aos-duration="1000">
+                <img src="assets/portret1.png" class="portret">
+                <h2>Who is this guy?</h2>
+                <p>I'm a Front-End Freelancer working for fun currently. <br> I'm always willing to learn something new</p>
+             </div>
 
-    <script>
-        // List of drinks
-        const initialDrinks = ["Vodka", "Tequila", "Beer", "Whiskey", "Rum"];
-        let drinks = [...initialDrinks];
+            <div class="text-center item-languages" data-aos="fade-left" data-aos-duration="1000">
+                <p>HTML</p><progress max="100" value="80"></progress>
+                <p>CSS</p><progress max="100" value="75"></progress>
+                <p>JavaScript</p><progress max="100" value="55"></progress>
+                <p>Laravel</p><progress max="100" value="50"></progress>
+                <p>VueJs</p><progress max="100" value="35"></progress>
+                <p>Python</p><progress max="100" value="10"></progress>
+                <p>Assembler</p><progress max="100" value="0"></progress>
+            </div>
+        </div>
+    </section> 
 
-        // Retrieve saved counts from localStorage or initialize to zero
-        const savedCounts = JSON.parse(localStorage.getItem('counts')) || Array(drinks.length).fill(0);
-        let totalDrinks = parseInt(localStorage.getItem('total')) || 0;
 
-        // Function to create a drink item
-        function createDrinkItem(drinkName, index) {
-            const drinkItem = document.createElement("div");
-            drinkItem.className = "drink-item";
+    <!-- PORTFOLIO -->
+    <section id="section1">
+      <svg width="100%" height="100" viewBox="0 0 100 102" preserveAspectRatio="none">
+        <path d="M0 0 L50 90 L100 0 V100 H0" fill="#f5f5f5" />
+      </svg>
+    </section>
+    <section id="#portfolio" class="portfolio-bg">
+        <!-- TITLE -->
+        <div class="about-title">PORTFOLIO</div>
+        <div class="about-border"></div>
+        <!-- ACTUAL PICTURESA -->
+        <div class="container-img" data-aos="fade-up">
+            <div class="container-hover" data-aos="fade-up">
+              <img src="assets/dp.png" class="image-hover">
+              <div class="overlay-hover">
+                <div class="text-hover">Laravel</div>
+                <a href="#" class="img-link">Link</a>
 
-            const drinkNameEl = document.createElement("span");
-            drinkNameEl.className = "drink-name";
-            drinkNameEl.innerText = drinkName;
+            </div>
+            </div>
+            <div class="container-hover" data-aos="fade-up">
+              <img src="assets/portfolio.png" class="image-hover">
+              <div class="overlay-hover">
+                <div class="text-hover">Portfolio</div>
+                <a href="#" class="img-link">Link</a>
 
-            const minusButton = document.createElement("button");
-            minusButton.innerText = "-";
-            minusButton.onclick = function() {
-                const amountEl = drinkItem.querySelector(".amount");
-                let currentAmount = parseInt(amountEl.innerText);
-                if (currentAmount > 0) {
-                    amountEl.innerText = currentAmount - 1;
-                    totalDrinks -= 1;
-                    savedCounts[index] -= 1;
-                    updateTotal();
-                    saveData();
-                }
-            };
+            </div>
+            </div>
+            <div class="container-hover" data-aos="fade-up">
+              <img src="assets/meintenance.png" class="image-hover">
+              <div class="overlay-hover">
+                <div class="text-hover">Meintenance</div>
+                <a href="#" class="img-link">Link</a>
 
-            const amountEl = document.createElement("span");
-            amountEl.className = "amount";
-            amountEl.innerText = savedCounts[index];
+            </div>
+            </div>
+        </div>
+    </section>
 
-            const plusButton = document.createElement("button");
-            plusButton.innerText = "+";
-            plusButton.onclick = function() {
-                const amountEl = drinkItem.querySelector(".amount");
-                let currentAmount = parseInt(amountEl.innerText);
-                amountEl.innerText = currentAmount + 1;
-                totalDrinks += 1;
-                savedCounts[index] += 1;
-                updateTotal();
-                saveData();
-            };
-
-            drinkItem.appendChild(drinkNameEl);
-            drinkItem.appendChild(minusButton);
-            drinkItem.appendChild(amountEl);
-            drinkItem.appendChild(plusButton);
-
-            return drinkItem;
-        }
-
-        // Update the total drinks count in the total div
-        function updateTotal() {
-            document.getElementById("total-number").innerText = "Total Drinks: " + totalDrinks;
-            const totalContent = document.getElementById("total-content");
-            totalContent.innerHTML = ""; // Clear previous breakdown
-
-            // Generate breakdown of drink counts
-            savedCounts.forEach((count, index) => {
-                if (count > 0) {
-                    const breakdownLine = document.createElement("div");
-                    breakdownLine.innerText = drinks[index] + " - " + count;
-                    totalContent.appendChild(breakdownLine);
-                }
-            });
-        }
-
-        // Save data to localStorage
-        function saveData() {
-            localStorage
-                        localStorage.setItem('total', totalDrinks);
-            localStorage.setItem('counts', JSON.stringify(savedCounts));
-        }
-
-        // Reset all drink counts
-        function resetDrinks() {
-            savedCounts.fill(0);
-            totalDrinks = 0;
-            saveData();
-            updateTotal();
-            document.querySelectorAll('.amount').forEach(el => el.innerText = "0");
-        }
-
-        // Modal functionality
-        function showModal() {
-            document.getElementById("modal").style.display = "flex";
-        }
-
-        function closeModal() {
-            document.getElementById("modal").style.display = "none";
-            resetDrinks();
-        }
-
-        // Add new drink
-        function addNewDrink(drinkName) {
-            if (drinkName && !drinks.includes(drinkName)) {
-                drinks.push(drinkName);
-                savedCounts.push(0); // Add initial count of 0 for new drink
-                const newDrinkItem = createDrinkItem(drinkName, drinks.length - 1);
-                document.getElementById("drinks-list").appendChild(newDrinkItem);
-                saveData();
-                updateTotal();
-            }
-        }
-
-        // Add initial drinks to the list
-        function initializeDrinks() {
-            const drinksList = document.getElementById("drinks-list");
-            drinks.forEach((drink, index) => {
-                const drinkItem = createDrinkItem(drink, index);
-                drinksList.appendChild(drinkItem);
-            });
-            updateTotal();
-        }
-
-        // Event Listeners
-        document.getElementById("reset").addEventListener("click", resetDrinks);
-        document.getElementById("submit").addEventListener("click", showModal);
-        document.getElementById("close-modal").addEventListener("click", closeModal);
-
-        document.getElementById("add-button").addEventListener("click", () => {
-            const newDrinkInput = document.getElementById("new-drink");
-            const newDrinkName = newDrinkInput.value.trim();
-            newDrinkInput.value = ""; // Clear the input field
-            addNewDrink(newDrinkName);
-        });
-
-        // Initialize the page
-        initializeDrinks();
-    </script>
+    <footer>
+        <div class="container">
+          <a href="https://github.com/hydratypelvl" target="_blank">
+            <div class="nav-item github-color">
+              <i class="fa fa-github fa-lg"></i>
+            </div>
+          </a>
+          <a href="https://www.facebook.com/rihards.janis.7" target="_blank">
+            <div class="nav-item fb-color">
+              <i class="fa fa-facebook fa-lg"></i>
+            </div>
+          </a>
+          <a href="https://instagram.com/rihards.adm/" target="_blank">
+            <div class="nav-item ig-color">
+              <i class="fa fa-instagram fa-lg"></i>
+            </div>
+          </a>
+        </div>
+        <div class="info-box">
+          <div class="footer-text">
+            RIHARDS ĀDMINIS ©2020
+          </div>
+        </div>
+      </footer>
+      <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+      <script>
+        AOS.init();
+      </script>
 </body>
 </html>
-
